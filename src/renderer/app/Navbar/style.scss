@@ -1,0 +1,27 @@
+.tabs-container {
+  background: #1a202a;
+  position: sticky;
+  top: 0;
+  left: 0;
+  height: 50px;
+  padding: 10px 0;
+  p {
+    margin: 0;
+  }
+  > .ant-tabs-card {
+    .ant-tabs-content {
+      height: 120px;
+      margin-top: -16px;
+      > .ant-tabs-tabpane {
+        padding: 0;
+      }
+    }
+    > .ant-tabs-nav::before {
+      border-bottom: 1px solid #1a202a;
+    }
+  }
+
+  .ant-tabs-content-holder {
+    display: none;
+  }
+}
