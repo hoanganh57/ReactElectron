@@ -99,7 +99,8 @@
     "react-dom": "^18.2.0",
     "react-icons": "^4.6.0",
     "react-router-dom": "^6.4.3",
-    "recoil": "^0.7.6"
+    "recoil": "^0.7.6",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.7",

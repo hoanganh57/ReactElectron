@@ -14,15 +14,24 @@ export const resolveHtmlPath = (htmlFileName: string) => {
 
 export const resizeView = (
   view: Electron.BrowserView,
-  mainWindow: Electron.BrowserWindow | null
+  mainWindow: Electron.BrowserWindow | null,
+  isShowView: boolean
 ) => {
   const bound = mainWindow?.getBounds();
-  view.setBounds({
+  let bounds = {
     x: 0,
-    y: 50,
-    width: (bound?.width || 0) - 15,
-    height: (bound?.height || 0) - 85,
-  });
+    y: 0,
+    width: 0,
+    height: 0,
+  };
+  if (isShowView)
+    bounds = {
+      x: 41,
+      y: 0,
+      width: (bound?.width || 0) - 56,
+      height: (bound?.height || 0) - 39,
+    };
+  view.setBounds(bounds);
 };
 
 export const installExtensions = async () => {

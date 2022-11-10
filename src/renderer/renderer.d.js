@@ -2,8 +2,8 @@
 declare global {
   interface Window {
     api: {
-      sendMessage: (message: string) => void;
-      createService: (url: string) => void;
+      addService: (key: string) => void;
+      visibleService: (isShowView: boolean) => void;
     };
   }
 }

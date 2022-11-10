@@ -14,6 +14,10 @@ module.exports = {
         endOfLine: "auto",
       },
     ],
+    "react/self-closing-comp": "off",
+    "react/jsx-curly-brace-presence": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
   },
   parserOptions: {
     ecmaVersion: 2020,

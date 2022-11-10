@@ -5,6 +5,7 @@ import log from "electron-log";
 import { autoUpdater } from "electron-updater";
 import path from "path";
 import MenuBuilder from "./menu";
+import Services from "./services";
 import { installExtensions, resizeView, resolveHtmlPath } from "./util";
 
 class AppUpdater {
@@ -16,6 +17,7 @@ class AppUpdater {
 }
 
 let mainWindow: BrowserWindow | null = null;
+let isShowView = true;
 
 if (process.env.NODE_ENV === "production") {
   const sourceMapSupport = require("source-map-support");
@@ -84,7 +86,7 @@ const createWindow = async () => {
 
   mainWindow?.on("resize", () => {
     mainWindow?.getBrowserViews().forEach((view) => {
-      resizeView(view, mainWindow);
+      resizeView(view, mainWindow, isShowView);
     });
   });
 
@@ -121,14 +123,20 @@ app
  * Add ipc listeners...
  */
 
-ipcMain.on("sendMessage", (e, message: string) => {
-  const view = new BrowserView();
-  mainWindow?.addBrowserView(view);
-  resizeView(view, mainWindow);
-  view.setBackgroundColor("#fff");
-  view.webContents.loadURL("https://web.telegram.org/");
+ipcMain.on("addService", (e, key) => {
+  const url = Services.find((s) => s.key === key)?.url;
+  if (url) {
+    const view = new BrowserView();
+    mainWindow?.addBrowserView(view);
+    resizeView(view, mainWindow, isShowView);
+    view.setBackgroundColor("#fff");
+    view.webContents.loadURL(url);
+  }
 });
 
-ipcMain.on("createService", (e, url) => {
-  console.log(url);
+ipcMain.on("visibleService", (e, isShow) => {
+  mainWindow?.getBrowserViews().forEach((view) => {
+    resizeView(view, mainWindow, isShow);
+  });
+  isShowView = isShow;
 });

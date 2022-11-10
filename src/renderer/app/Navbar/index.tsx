@@ -1,52 +1,75 @@
 import { Tabs } from "antd";
-import React from "react";
-import ListIcon from "renderer/utils/ListIcons";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Icon from "renderer/components/Icon";
 import "./style.scss";
 
-interface Props {
-  name: string;
-}
-
-const Icon = ({ name }: Props) => {
-  const findIcon = ListIcon.find((el: any) => el.name === name);
-  if (!findIcon) return null;
-  return (
-    <img
-      src={findIcon.icon}
-      alt={findIcon.name}
-      className="w-[20px] h-[20px]"
-    />
-  );
-};
-
 const Navbar = () => {
-  const items = [
+  const navigate = useNavigate();
+
+  const [activeKey, setActiveKey] = useState("home");
+  const [items, setItems] = useState([
     {
       label: (
-        <span className="flex gap-2 text-center">
+        <span className="flex items-center justify-center">
           <Icon name="telegram" />
-          <span className="">Telegram</span>
         </span>
       ),
       key: "telegram",
     },
     {
       label: (
-        <span className="flex gap-2 text-center">
+        <span className="flex items-center">
           <Icon name="messenger" />
-          <span className="">Messenger</span>
         </span>
       ),
       key: "messenger",
     },
-  ];
+  ]);
+
   return (
     <div className="tabs-container">
       <Tabs
         items={items}
         type="card"
         size="small"
-        tabBarStyle={{ marginBottom: 0, padding: "0 5px" }}
+        tabPosition="left"
+        activeKey={activeKey}
+        onChange={(key) => {
+          setActiveKey(key);
+          navigate(`/service/${key}`);
+        }}
+        tabBarExtraContent={{
+          left: (
+            <span className="flex justify-center items-center h-[40px] w-[40px]">
+              <Icon name="logo" />
+            </span>
+          ),
+          right: (
+            <>
+              <span
+                className={`flex justify-center items-center h-[40px] w-[40px] cursor-pointer
+                ${activeKey === "add" && "active"}`}
+                onClick={() => {
+                  setActiveKey("add");
+                  navigate("/service/add");
+                }}
+              >
+                <Icon name="add" size="small" />
+              </span>
+              <span
+                className={`flex justify-center items-center h-[40px] w-[40px] cursor-pointer
+                ${activeKey === "setting" && "active"}`}
+                onClick={() => {
+                  setActiveKey("setting");
+                  navigate("/setting");
+                }}
+              >
+                <Icon name="setting" size="small" />
+              </span>
+            </>
+          ),
+        }}
       />
     </div>
   );

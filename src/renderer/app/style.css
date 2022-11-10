@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 body {
-  color: white;
+  color: #000a23;
   height: 100vh;
-  background: #000a23;
+  background: #fff;
   font-family: sans-serif;
   overflow-y: hidden;
   margin: 0;

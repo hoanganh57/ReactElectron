@@ -1,12 +1,10 @@
 import { contextBridge, ipcRenderer } from "electron";
 
 contextBridge.exposeInMainWorld("api", {
-  sendMessage: (message: string) => {
-    console.log(message);
-    ipcRenderer.send("sendMessage", message);
+  addService: (key: string) => {
+    ipcRenderer.send("addService", key);
   },
-  createService: (url: string) => {
-    console.log(url);
-    ipcRenderer.send("createService", url);
+  visibleService: (isShowView: boolean) => {
+    ipcRenderer.send("visibleService", isShowView);
   },
 });
