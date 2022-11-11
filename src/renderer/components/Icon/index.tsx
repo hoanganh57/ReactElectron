@@ -16,6 +16,7 @@ const Icon = ({ name, size }: Props) => {
   if (!findIcon) return null;
   let classIcon = "";
   if (size === "small") classIcon = "w-[18px] h-[18px]";
+  else if (size === "large") classIcon = "w-[36px] h-[36px]";
   else classIcon = "w-[24px] h-[24px]";
   return <img src={findIcon.icon} alt={findIcon.name} className={classIcon} />;
 };

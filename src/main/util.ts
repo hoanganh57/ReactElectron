@@ -1,6 +1,19 @@
 /* eslint import/prefer-default-export: off, global-require: off, no-console: off */
 import { URL } from "url";
 import path from "path";
+import { BrowserView, Session } from "electron";
+
+export const AppReturn = (status: number, data: unknown | null) => {
+  let messageReturn = "";
+  if (status === 200) messageReturn = "Success";
+  if (status === 500) messageReturn = "Error";
+  const result = {
+    status,
+    message: messageReturn,
+    data,
+  };
+  return result;
+};
 
 export const resolveHtmlPath = (htmlFileName: string) => {
   if (process.env.NODE_ENV === "development") {
@@ -45,4 +58,21 @@ export const installExtensions = async () => {
       forceDownload
     )
     .catch(console.error);
+};
+
+export const createBrowserView = (
+  url: string,
+  session: Session,
+  mainWindow: Electron.BrowserWindow | null,
+  isShowView: boolean
+) => {
+  const view = new BrowserView({
+    webPreferences: {
+      session,
+    },
+  });
+  resizeView(view, mainWindow, isShowView);
+  view.setBackgroundColor("#fff");
+  view.webContents.loadURL(url);
+  return view;
 };

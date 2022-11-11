@@ -7,7 +7,7 @@ const ViewService = () => {
   useEffect(() => {
     if (key) {
       window.api.visibleService(true);
-      window.api.addService(key || "");
+      window.api.addService(key);
     }
   }, [key]);
   return null;

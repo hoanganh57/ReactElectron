@@ -1,12 +1,19 @@
-/* eslint global-require: off, no-console: off, promise/always-return: off */
+/* eslint global-require: off, no-console: off, promise/always-return: off, no-new: off */
 
-import { app, BrowserView, BrowserWindow, ipcMain, shell } from "electron";
+import { app, BrowserWindow, ipcMain, session, shell } from "electron";
 import log from "electron-log";
 import { autoUpdater } from "electron-updater";
 import path from "path";
+import { v4 as uuidv4 } from "uuid";
 import MenuBuilder from "./menu";
 import Services from "./services";
-import { installExtensions, resizeView, resolveHtmlPath } from "./util";
+import {
+  AppReturn,
+  createBrowserView,
+  installExtensions,
+  resizeView,
+  resolveHtmlPath,
+} from "./util";
 
 class AppUpdater {
   constructor() {
@@ -50,7 +57,7 @@ const createWindow = async () => {
     height: 600,
     minWidth: 800,
     minHeight: 600,
-    icon: getAssetPath("icon.png"),
+    icon: getAssetPath("logo.ico"),
     webPreferences: {
       preload: app.isPackaged
         ? path.join(__dirname, "preload.js")
@@ -91,7 +98,6 @@ const createWindow = async () => {
   });
 
   // Remove this if your app does not use auto updates
-  // eslint-disable-next-line no-new
   new AppUpdater();
 };
 
@@ -123,18 +129,21 @@ app
  * Add ipc listeners...
  */
 
-ipcMain.on("addService", (e, key) => {
+ipcMain.handle("addService", (_, key) => {
   const url = Services.find((s) => s.key === key)?.url;
   if (url) {
-    const view = new BrowserView();
+    const keySession = `${key}${uuidv4()}`;
+    const viewSession = session.fromPartition(keySession, {
+      cache: true,
+    });
+    const view = createBrowserView(url, viewSession, mainWindow, isShowView);
     mainWindow?.addBrowserView(view);
-    resizeView(view, mainWindow, isShowView);
-    view.setBackgroundColor("#fff");
-    view.webContents.loadURL(url);
+    return AppReturn(200, keySession);
   }
+  return AppReturn(500, "Not found service");
 });
 
-ipcMain.on("visibleService", (e, isShow) => {
+ipcMain.on("visibleService", (_, isShow) => {
   mainWindow?.getBrowserViews().forEach((view) => {
     resizeView(view, mainWindow, isShow);
   });

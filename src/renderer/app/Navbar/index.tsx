@@ -41,7 +41,13 @@ const Navbar = () => {
         }}
         tabBarExtraContent={{
           left: (
-            <span className="flex justify-center items-center h-[40px] w-[40px]">
+            <span
+              className={`flex justify-center items-center h-[40px] w-[40px]`}
+              onClick={() => {
+                setActiveKey("home");
+                navigate("/");
+              }}
+            >
               <Icon name="logo" />
             </span>
           ),
